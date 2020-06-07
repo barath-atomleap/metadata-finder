@@ -4,6 +4,8 @@ from finders import finders
 from utils.exceptions import NotFoundException
 import uvicorn
 import logging
+import asyncio
+
 configure_logging()
 
 app = FastAPI()
@@ -17,14 +19,37 @@ def list_finders():
   return finders_list
 
 
-@app.get('/{finder}/{name}', summary='Search Wikipedia')
+@app.get(('/all/{name}'), summary='Search all finders')
+async def get_all(name: str = Path(None, title='Company name to search')):
+  name = name.replace('+', ' ')
+  all_finders = list_finders()
+  results = {}
+
+  async def get_one(finder: str):
+    try:
+      logging.info(f'looking in {finder} for {name}')
+      result = await finders[finder](name)
+      results[finder] = result
+    except Exception as ex:
+      logging.error(f'[{finder}] {str(ex)}')
+      results[finder] = {'error': str(ex)}
+
+  futures = [get_one(f) for f in all_finders]
+  await asyncio.gather(*futures)
+  return results
+
+
+@app.get('/{finder}/{name}', summary='Search one finder')
 async def get_data(finder: str = Path(None, title='Finder to use'),
-                   name: str = Path(None, title='Company name to search for')):
+                   name: str = Path(None, title='Company name to search')):
+  name = name.replace('+', ' ')
   try:
     logging.info(f'looking in {finder} for {name}')
-    return finders[finder](name)
+    return await finders[finder](name)
   except NotFoundException as ex:
     raise HTTPException(status_code=404, detail=ex.message)
+  except Exception as ex:
+    raise HTTPException(status_code=500, detail=str(ex))
 
 
 if __name__ == '__main__':
