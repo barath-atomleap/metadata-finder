@@ -1,0 +1,29 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+yapf = "*"
+flake8 = "*"
+pep8-naming = "*"
+pytest = "*"
+
+[packages]
+aiohttp = "*"
+aiofiles = "*"
+omegaconf = "*"
+memoization = "*"
+azure-identity = "==1.4.0b3"
+azure-keyvault = "*"
+python-dotenv = "*"
+azure-cognitiveservices-search-entitysearch = "*"
+requests = "*"
+schematics = "*"
+coloredlogs = "*"
+wptools = "*"
+fastapi = "*"
+uvicorn = "*"
+
+[requires]
+python_version = "3.8"

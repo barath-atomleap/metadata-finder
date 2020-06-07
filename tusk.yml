@@ -1,0 +1,6 @@
+usage: delphai tasks
+
+tasks:
+  start:
+    usage: run the application in development mode
+    run: cd src && pipenv run uvicorn server:app --reload

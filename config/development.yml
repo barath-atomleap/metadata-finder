@@ -1,0 +1,12 @@
+clearbit:
+  api_key: ${env:CLEARBIT_API_KEY}
+
+bing:
+  endpoint: ${env:BING_ENDPOINT}
+  subscription_key: ${env:BING_SUBSCRIPTION_KEY}
+
+google:
+  api_key: ${env:GOOGLE_API_KEY}
+
+diffbot:
+  token: ${env:DIFFBOT_TOKEN}
